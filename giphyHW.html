@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Favorite gifSearchs</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Josefin+Sans:100,400,600,700">
+</head>
+
+<style>
+    body {
+        font-family: "Josefin Sans";
+        background-color: aliceblue;
+    }
+
+    div {
+        display: block;
+    }
+
+    button {
+        margin: auto;
+        width: auto;
+        height: 30px;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 5px;
+        line-height: 20px;
+        background-color: rgb(5, 18, 57);
+        border-radius: 100px;
+    }
+
+    .crypto-button-color {
+        color: slategray;
+    }
+
+    .request-color {
+        color: rgb(97, 167, 214);
+    }
+</style>
+
+<body>
+
+    <div></div>
+
+    <div class="container">
+        <h1>gifSearch Search</h1>
+
+        <div id="display"></div>
+        <div id="buttons"></div>
+
+        <!-- We'll be dumping our JSON contents in here -->
+        <div id="gifSearch-view"></div>
+
+        <!-- This form will be where users input data about the gifSearchs -->
+        <form id="gifSearch-form">
+            <label for="gifSearch-input">What would you like to be?</label>
+
+            <br>
+
+            <div class="container" id="things-Nate-and-I-may-want-to-be">
+                <input type="button" name="cryptoName" id="gifSearch-input" value="naked snowboarder">
+                <input type="button" name="cryptoName" id="gifSearch-input" value="stop light window washer">
+                <input type="button" name="cryptoName" id="gifSearch-input" value="senior advisor to donald trump">
+                <input type="button" name="cryptoName" id="gifSearch-input" value="evil clown manufacturer">
+                <input type="button" name="cryptoName" id="gifSearch-input" value="interatmospheric parachutist">
+                <input type="button" name="cryptoName" id="gifSearch-input" value="algae-based biofuel engineer">
+                <input type="button" name="cryptoName" id="gifSearch-input" value="walmart hacker">
+                <input type="button" name="cryptoName" id="gifSearch-input" value="horse race announcer">
+                <input type="button" name="cryptoName" id="gifSearch-input" value="steroid drug dealer">
+                <input type="button" name="cryptoName" id="gifSearch-input" value="bathsalt cannibal">
+            </div>
+
+            <br>
+
+            <!-- This button will trigger our AJAX call -->
+            <input id="find-gifSearch" type="submit" value="gifSearch Search">
+        </form>
+
+
+
+
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script type="text/javascript">
+            $("#find-gifSearch").on("click", function (event) {
+
+                event.preventDefault();
+
+                var gifSearch = $("#gifSearch-input").val();
+                var queryURL = "api.giphy.com/" + gifSearch + "/v1/gifs/search";
+                var tenImages = [];
+                var tenImageNames = [];
+                var tenImageURLs = [];
+
+                $.ajax({
+                    url: queryURL,
+                    method: "GET"
+                }).then(function (response) {
+                    //$("#______").text(JSON.stringify(response));
+                    console.log(response);
+
+                    var GphApiClient = require('giphy-js-sdk-core')
+                    client = GphApiClient("dc6zaTOxFJmzC") // DEFAULT PUBLIC API KEY
+
+
+                    /// Gif Search
+                    client.search('gifs', {
+                            "q": "cats",
+                            "ratings": 10
+                        })
+                        .then((response) => {
+                            response.data.forEach((gifObject) => {
+                                console.log(gifObject)
+                            })
+                        })
+                        .catch((err) => {
+
+                        })
+
+
+
+
+
+                    comparisonCoin = response.rates;
+                    compareCoinRate = compareRate;
+
+                    for (var i = 0; i < comparisonCoin.length; i++) {
+                        console.log(comparisonCoin[i]);
+                        console.log(comparisonCoin[i].asset_id_quote);
+                        console.log(comparisonCoin[i].rate);
+                        $("#gifSearch-view").text(JSON.stringify(response));
+
+                        var compareCoinName = comparisonCoin[i].asset_id_quote;
+                        var compareRate = comparisonCoin[i].rate;
+
+                        //$("#gifSearch-view").text(JSON.stringify(comparisonCoin));
+
+                        var cryptoBtn = $("<button>").addClass(
+                                "crypto-button crypto crypto-button-color")
+                            .attr("data-crypto", compareCoinName)
+                            .text(compareCoinName)
+                            .appendTo("#buttons");
+                    };
+
+                    $(".crypto-button").on("click", function () {
+
+                        var requestToDisplay = $("<div>").addClass("crypto request-color")
+                            .text($(this).attr("data-crypto"))
+                            .appendTo("#display");
+
+                    });
+
+                    $(".crypto-button").on("click", function () {
+
+                        var requestrateToDisplay = $("<div>").addClass("crypto request-rate")
+                            .text(JSON.stringify.compareRate)
+                            .appendTo("#display");
+
+                    });
+                });
+
+                // -----------------------------------------------------------------------
+
+            });
+        </script>
+    </div>
+</body>
+
+</html>
