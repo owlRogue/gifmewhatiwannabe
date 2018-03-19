@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Favorite gifSearchs</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Josefin+Sans:100,400,600,700">
+</head>
+
+<style>
+    body {
+        font-family: "Josefin Sans";
+        background-color: aliceblue;
+        padding: 40px;
+    }
+
+    div {
+        display: block;
+    }
+
+    button {
+        margin: auto;
+        width: auto;
+        height: 30px;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 5px;
+        line-height: 20px;
+        background-color: rgb(5, 18, 57);
+        border-radius: 100px;
+        color: white;
+    }
+
+    .wannabe-button-color {
+        color: slategray;
+    }
+
+    .request-color {
+        color: rgb(97, 167, 214);
+    }
+
+    img {
+      max-width: 200px;
+      overflow: hidden;
+    }
+
+    #gifs-div {
+      display: inline;
+      max-width: 900px;
+    }
+
+</style>
+
+<body>
+
+        <form id="search-form">
+                <label for="Search-input">What would you like to be?</label>
+                <input type="text" id="Search-input">
+          
+                <!-- This button will trigger our AJAX call -->
+                <input id="gifSearch-input" type="submit" value="Search">
+              </form>
+
+<br>
+
+  <div id="button-div"></div>
+
+  <br>
+
+  <div id="gifs-div"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    var whatToBe = [
+      'naked snowboarder',
+      'stop light window washer',
+      'senior advisor to donald trump',
+      'evil clown manufacturer',
+      'interatmospheric parachutist',
+      'algae-based biofuel engineer',
+      'walmart hacker',
+      'horse race announcer',
+      'steroid drug dealer',
+      'bathsalt cannibal'
+    ];
+
+
+    for (var i = 0; i < whatToBe.length; i++) {
+      console.log(whatToBe[i]);
+
+      var wannabeBtn = $("<button>").addClass("wannabe-button")
+        .attr("data-wannabe", whatToBe[i])
+        .text(whatToBe[i])
+        .appendTo("#button-div");
+    };
+
+    // Event listener for all button elements
+    $("button").on("click", function () {
+
+      var gifSearch = $("#gifSearch-input").val();
+
+      // Constructing a URL to search Giphy for each
+      var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + gifSearch + "&api_key=dc6zaTOxFJmzC&limit=10";
+
+      // Performing our AJAX GET request
+      $.ajax({
+          url: queryURL,
+          method: "GET",
+          limit: 10
+        })
+        // After the data comes back from the API
+        .then(function (response) {
+          // Storing an array of results in the results variable
+          var results = response.data;
+
+          for (var i = 0; i < results.length; i++) {
+
+            if (results[i].rating = "r") {
+
+              var gifDiv = $("<div class='things'>");
+
+              // Creating an image tag
+              var gifImage = $("<img>");
+
+              gifImage.attr("src", results[i].images.fixed_height.url);
+
+              // Appending the paragraph and gifImage we created to the "gifDiv" div we created
+              gifDiv.append(gifImage);
+
+              // Prepending the gifDiv to the "#gifs-div" div in the HTML
+              $("#gifs-div").prepend(gifDiv);
+            }
+          }
+        });
+    });
+  </script>
+</body>
+
+</html>

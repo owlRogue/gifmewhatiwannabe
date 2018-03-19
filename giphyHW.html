@@ -31,7 +31,7 @@
         border-radius: 100px;
     }
 
-    .crypto-button-color {
+    .wannabe-button-color {
         color: slategray;
     }
 
@@ -50,6 +50,10 @@
         <div id="display"></div>
         <div id="buttons"></div>
 
+        <div id="button-div"></div>
+        <div id="gifs-div">
+        </div>
+
         <!-- We'll be dumping our JSON contents in here -->
         <div id="gifSearch-view"></div>
 
@@ -60,27 +64,14 @@
             <br>
 
             <div class="container" id="things-Nate-and-I-may-want-to-be">
-                <input type="button" name="cryptoName" id="gifSearch-input" value="naked snowboarder">
-                <input type="button" name="cryptoName" id="gifSearch-input" value="stop light window washer">
-                <input type="button" name="cryptoName" id="gifSearch-input" value="senior advisor to donald trump">
-                <input type="button" name="cryptoName" id="gifSearch-input" value="evil clown manufacturer">
-                <input type="button" name="cryptoName" id="gifSearch-input" value="interatmospheric parachutist">
-                <input type="button" name="cryptoName" id="gifSearch-input" value="algae-based biofuel engineer">
-                <input type="button" name="cryptoName" id="gifSearch-input" value="walmart hacker">
-                <input type="button" name="cryptoName" id="gifSearch-input" value="horse race announcer">
-                <input type="button" name="cryptoName" id="gifSearch-input" value="steroid drug dealer">
-                <input type="button" name="cryptoName" id="gifSearch-input" value="bathsalt cannibal">
+
+                <input type="button" name="wannabeName" id="gifSearch-input" value="naked snowboarder">
             </div>
 
             <br>
-
             <!-- This button will trigger our AJAX call -->
             <input id="find-gifSearch" type="submit" value="gifSearch Search">
         </form>
-
-
-
-
 
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -89,11 +80,22 @@
 
                 event.preventDefault();
 
+                var whatToBe = [
+                    'naked snowboarder',
+                    'stop light window washer',
+                    'senior advisor to donald trump',
+                    'evil clown manufacturer',
+                    'interatmospheric parachutist',
+                    'algae-based biofuel engineer',
+                    'walmart hacker',
+                    'horse race announcer',
+                    'steroid drug dealer',
+                    'bathsalt cannibal'
+                ]
                 var gifSearch = $("#gifSearch-input").val();
-                var queryURL = "api.giphy.com/" + gifSearch + "/v1/gifs/search";
-                var tenImages = [];
-                var tenImageNames = [];
-                var tenImageURLs = [];
+                var queryURL = "http://api.giphy.com/v1/gifs/search";
+                var images = [];
+
 
                 $.ajax({
                     url: queryURL,
@@ -106,10 +108,15 @@
                     client = GphApiClient("dc6zaTOxFJmzC") // DEFAULT PUBLIC API KEY
 
 
-                    /// Gif Search
-                    client.search('gifs', {
+                        /// Gif Search
+                        client.search('gifs', {
                             "q": "cats",
-                            "ratings": 10
+                            "limit": 10, //  - integer - number of results to return, maximum 100. Default 25.
+                            "offset": 0, // - integer - results offset, defaults to 0.
+                            "rating": "r", // - string - limit results to those rated (y,g, pg, pg-13 or r).
+                            "sort": "relevant" // - string - the sort order of the results returned (recent | relevant)
+                            // "lang": // - string - specify default country for regional content; format is 2-letter ISO 639-1 country code. See list of supported languages here
+                            // "fmt": // - string - return results in html or json format (useful for viewing responses as GIFs to debug/test)
                         })
                         .then((response) => {
                             response.data.forEach((gifObject) => {
@@ -120,46 +127,27 @@
 
                         })
 
+                    for (var i = 0; i < whatToBe.length; i++) {
+                        console.log(whatToBe[i]);
+                        $("#gifSearch-view").append(response);
 
-
-
-
-                    comparisonCoin = response.rates;
-                    compareCoinRate = compareRate;
-
-                    for (var i = 0; i < comparisonCoin.length; i++) {
-                        console.log(comparisonCoin[i]);
-                        console.log(comparisonCoin[i].asset_id_quote);
-                        console.log(comparisonCoin[i].rate);
-                        $("#gifSearch-view").text(JSON.stringify(response));
-
-                        var compareCoinName = comparisonCoin[i].asset_id_quote;
-                        var compareRate = comparisonCoin[i].rate;
-
-                        //$("#gifSearch-view").text(JSON.stringify(comparisonCoin));
-
-                        var cryptoBtn = $("<button>").addClass(
-                                "crypto-button crypto crypto-button-color")
-                            .attr("data-crypto", compareCoinName)
-                            .text(compareCoinName)
-                            .appendTo("#buttons");
+                        var wannabeBtn = $("<button>").addClass(
+                                "wannabe-button wannabe wannabe-button-color")
+                            .attr("data-wannabe", whatToBe)
+                            .text(whatToBe)
+                            .appendTo("#things-Nate-and-I-may-want-to-be");
                     };
 
-                    $(".crypto-button").on("click", function () {
+                    $(".wannabe-button").on("click", function () {
 
-                        var requestToDisplay = $("<div>").addClass("crypto request-color")
-                            .text($(this).attr("data-crypto"))
+                        var requestToDisplay = $("<img>").addClass("wannabe request-color")
+
                             .appendTo("#display");
 
                     });
 
-                    $(".crypto-button").on("click", function () {
 
-                        var requestrateToDisplay = $("<div>").addClass("crypto request-rate")
-                            .text(JSON.stringify.compareRate)
-                            .appendTo("#display");
 
-                    });
                 });
 
                 // -----------------------------------------------------------------------
